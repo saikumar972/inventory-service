@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/microservice3
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root123
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 9000
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
+  info:
+    env:
+      enabled: true
+
+info:
+  application:
+    name: actuator-example
+    description: spring 2.0 feature
+    artifactId: spring2.xx-actuator
+    version: v1
+
