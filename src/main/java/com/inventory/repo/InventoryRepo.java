@@ -16,11 +16,14 @@ public interface InventoryRepo extends JpaRepository<InventoryEntity,Long> {
     @Transactional
     @Modifying
     @Query(value = "update inventory i set i.quantity=:quantity where i.product=:product",nativeQuery = true)
-    public int updateQuantityByProductName(@Param("quantity") double quantity, @Param("product") String product);
+    int updateQuantityByProductName(@Param("quantity") double quantity, @Param("product") String product);
 
     @Query(value = "select quantity from inventory where product=:product",nativeQuery = true)
-    public double getQuantityByProductName(@Param("product") String product);
+    double getQuantityByProductName(@Param("product") String product);
 
     @Query(value = "select price from inventory where product=:product",nativeQuery = true)
-    public double getPriceByProductName(@Param("product") String product);
+    double getPriceByProductName(@Param("product") String product);
+
+    @Query(value = "select quantity,price from inventory where product=:product",nativeQuery = true)
+    Optional<Object> getQuantityAndPriceByProductName(@Param("product") String product);
 }

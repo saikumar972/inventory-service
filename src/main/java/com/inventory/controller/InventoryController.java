@@ -1,4 +1,4 @@
-package com.inventory.contrller;
+package com.inventory.controller;
 
 import com.inventory.entity.InventoryEntity;
 import com.inventory.entity.InventoryUpdateResponse;
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -20,12 +19,13 @@ public class InventoryController {
         return ResponseEntity.status(HttpStatus.OK).body(inventoryService.addInventories(inventoryEntities));
     }
     @GetMapping("/findAll")
-    public List<InventoryEntity> getAllInventories(){
-        return inventoryService.getAllInventories();
+    public ResponseEntity<List<InventoryEntity>> getAllInventories(){
+        List<InventoryEntity> inventoryEntityList=inventoryService.getAllInventories();
+        return ResponseEntity.ok(inventoryEntityList);
     }
-    @GetMapping("/name/{product}")
-    public ResponseEntity<InventoryEntity> inventoryList(@PathVariable String product){
-        return ResponseEntity.status(HttpStatus.OK).body(inventoryService.findByProductName(product));
+    @GetMapping("/name/{productName}")
+    public ResponseEntity<InventoryEntity> inventoryList(@PathVariable String productName){
+        return ResponseEntity.status(HttpStatus.OK).body(inventoryService.findByProductName(productName));
     }
     @PostMapping("/products")
     public ResponseEntity<List<InventoryEntity>> inventoryListByName(@RequestBody List<String> products){
@@ -35,6 +35,12 @@ public class InventoryController {
     @PutMapping("/updateInventory")
     public ResponseEntity<InventoryUpdateResponse> updateInventory(@RequestParam String productName,@RequestParam double quantity){
         InventoryUpdateResponse updatedInventory=inventoryService.updateInventory(productName,quantity);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedInventory);
+    }
+
+    @GetMapping("/checkAvailability")
+    public ResponseEntity<InventoryUpdateResponse> checkAvailability(@RequestParam String productName,@RequestParam double quantity){
+        InventoryUpdateResponse updatedInventory=inventoryService.checkAvailability(productName,quantity);
         return ResponseEntity.status(HttpStatus.OK).body(updatedInventory);
     }
 }

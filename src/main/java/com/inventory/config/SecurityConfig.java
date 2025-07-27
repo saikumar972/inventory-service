@@ -15,10 +15,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/inventory/add","/actuator","/actuator/**").permitAll()
+                        .requestMatchers("/inventory/add", "/actuator", "/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(httpBasic -> { }); // Updated, non-deprecated way
+                .httpBasic(httpBasic -> {
+                }); // Updated, non-deprecated way
         return http.build();
     }
 }

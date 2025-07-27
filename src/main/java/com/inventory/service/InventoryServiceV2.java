@@ -1,6 +1,7 @@
 package com.inventory.service;
 
 import com.inventory.entity.InventoryEntity;
+import com.inventory.entity.InventoryUpdateResponse;
 import com.inventory.repo.InventoryRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,24 @@ public class InventoryServiceV2 {
             inventoryBatches.add(inventoryEntityList.subList(i,end));
         }
         return inventoryBatches;
+    }
+
+    public InventoryUpdateResponse updateInventoryV2(String product, double consumedQuantity){
+        double presentQuantity=inventoryRepo.getQuantityByProductName(product);
+        //write a single sql query to get quantity and price
+        InventoryUpdateResponse inventoryUpdateResponse=new InventoryUpdateResponse();
+        if(consumedQuantity>presentQuantity){
+            throw new IllegalArgumentException("The expected Quantity not present in the stock try less");
+        }else{
+            double priceOfProduct=inventoryRepo.getPriceByProductName(product);
+            double totalPriceOfProducts=priceOfProduct*consumedQuantity;
+            inventoryUpdateResponse.setAmountPurchased(totalPriceOfProducts);
+            inventoryUpdateResponse.setProduct(product);
+            inventoryUpdateResponse.setQuantityConsumed(consumedQuantity);
+        }
+        int updateInventory=inventoryRepo.updateQuantityByProductName(presentQuantity-consumedQuantity,product);
+        System.out.println("Inventory stock is updated");
+        return inventoryUpdateResponse;
     }
 
 }
